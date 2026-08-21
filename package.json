@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "A url shortener",
+  "license": "ISC",
+  "author": "Sham",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test vitest",
+    "test:run": "cross-env NODE_ENV=test vitest run",
+    "test:coverage": "vitest run --coverage",
+    "dev": "node src/server.js",
+    "db:create": "npx dbmate create",
+    "db:new": "npx dbmate new",
+    "db:up": "npx dbmate up",
+    "db:rollback": "npx dbmate rollback",
+    "db:status": "npx dbmate status",
+    "db:test:up": "dotenv -e .env.test -- npx dbmate up",
+    "db:test:rollback": "dotenv -e .env.test -- npx dbmate rollback",
+    "db:test:status": "dotenv -e .env.test -- npx dbmate status",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.0",
+    "globals": "^17.11.0",
+    "typescript-eslint": "^8.67.0",
+    "vitest": "^4.1.11"
+  }
+}
