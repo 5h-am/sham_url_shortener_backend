@@ -1,23 +1,38 @@
 import app from './app.js'
+import { closePool } from './config/db.js'
+import { closeRedis } from './config/redis.js'
+import { logger } from './config/logger.js'
 
 const port = process.env.PORT || 3000
 
 const server = app.listen(port, () => {
     console.log(`Server booting on the ${port}`)
     console.log("Connection Established")
+
+    logger.info(`Server booting on the ${port}`)
+    logger.info("Connection Established")
 })
 
 const handleExit = (signal : string) => {
     console.log(`\n Received ${signal}. Performing a graceful shutdown`)
+    logger.info(`\n Received ${signal}. Performing a graceful shutdown`)
     server.close(async() => {
         try{
             console.log("HTTP Server Closed")
-            
+            logger.info("HTTP Server Closed")
+
+            closeRedis()
+            console.log("Redis Connection Closed")
+            logger.info("Redis Connection Closed")
+
+            closePool()         
             console.log("Database connection closed")
+            logger.info("Databse Connection Closed")
             process.exit(0)
 
         }catch(err) {
             console.log("Error Occured while shutting down the server", err)
+            logger.error({ err }, "Error Occured while shutting down the server")
             process.exit(1)
         }
     })

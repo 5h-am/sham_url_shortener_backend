@@ -4,13 +4,18 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
-import userRoutes from './routes.js'
+import userRoutes from './users.routes.js'
 import { globalErrorHandler } from './config/globalErrorHandler.js'
+import { configLogger } from './config/logger.js'
 import { AppError } from './utils/appError.js'
+import { swaggerDocs } from './config/swagger.js'
+import swaggerUi from 'swagger-ui-express'
 
 dotenv.config()
 
 const app = express()
+
+configLogger(app)
 
 app.use(helmet())
 app.use(morgan('combined'))
@@ -24,7 +29,10 @@ app.use(cookieParser(process.env.COOKIES_SIGN))
 app.use(express.json({ limit: '10KB'}))
 app.use(express.urlencoded({extended: true}))
 
+
 app.use('/api/v1', userRoutes)
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.use((req, res, next) => {
     const err = new AppError(`Can't find requested url ${req.originalUrl} on this server`, 404)

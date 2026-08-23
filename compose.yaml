@@ -35,9 +35,9 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      DBMATE_MIGRATIONS_DIR: /db/migrations
     volumes:
       - ./db/migrations:/db/migrations
-    working_dir: /db
     entrypoint: ["dbmate"]
 
 volumes:
