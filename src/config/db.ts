@@ -1,20 +1,19 @@
 import { Pool } from 'pg'
 import { logger } from './logger.js'
+import { env } from './env.js'
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: env.DATABASE_URL,
     max: 20,
     idleTimeoutMillis: 30 * 1000,
     connectionTimeoutMillis: 2000
 })
 
 pool.on("connect", () => {
-    console.log("A new client successfully connected to postgresql")
     logger.info("A new client successfully connected to postgresql")
 })
 
 pool.on("error", (err) => {
-    console.log("Error happened while creating a new postgresql connection", err.message)
     logger.error({ err }, "Error happened while creating a new postgresql connection")
 })
 

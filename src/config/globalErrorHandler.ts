@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express"
 import { AppError } from "../utils/appError.js"
 import { logger } from './logger.js'
+import { env } from './env.js'
 
 export const globalErrorHandler = (err:unknown, req: Request, res: Response, next: NextFunction) => {
-    const mode = process.env.NODE_ENV
+    const mode = env.NODE_ENV
     logger.error({ err, requestId: res.getHeader("x-request-id") })
     if(mode === 'production' || mode === 'testing') {
         if(err instanceof AppError) {

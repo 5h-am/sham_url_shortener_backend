@@ -2,8 +2,10 @@ import app from './app.js'
 import { closePool } from './config/db.js'
 import { closeRedis } from './config/redis.js'
 import { logger } from './config/logger.js'
+import { env } from './config/env.js'
 
-const port = process.env.PORT || 3000
+
+const port = env.PORT
 
 const server = app.listen(port, () => {
     console.log(`Server booting on the ${port}`)

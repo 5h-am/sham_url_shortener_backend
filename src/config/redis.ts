@@ -1,6 +1,7 @@
 import { Redis } from "ioredis"
+import { env } from "./env.js"
 
-const redisUrl = process.env.REDIS_URL
+const redisUrl = env.REDIS_URL
 
 if(!redisUrl) {
     throw new Error

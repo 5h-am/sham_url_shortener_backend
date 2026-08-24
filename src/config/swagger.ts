@@ -1,6 +1,7 @@
 import swaggerJsDoc from 'swagger-jsdoc'
+import { env } from './env.js'
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = env.NODE_ENV === 'production'
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -12,7 +13,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: process.env.BACKEND_URL || 'http://localhost:3000'
+                url: env.BACKEND_URL || 'http://localhost:3000'
             },
         ],
         components: {

@@ -2,7 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import userRoutes from './users.routes.js'
 import { globalErrorHandler } from './config/globalErrorHandler.js'
@@ -10,8 +9,7 @@ import { configLogger } from './config/logger.js'
 import { AppError } from './utils/appError.js'
 import { swaggerDocs } from './config/swagger.js'
 import swaggerUi from 'swagger-ui-express'
-
-dotenv.config()
+import { env } from './config/env.js'
 
 const app = express()
 
@@ -20,11 +18,11 @@ configLogger(app)
 app.use(helmet())
 app.use(morgan('combined'))
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: env.FRONTEND_URL,
     credentials: true
 }))
 
-app.use(cookieParser(process.env.COOKIES_SIGN))
+app.use(cookieParser(env.COOKIES_SIGN))
 
 app.use(express.json({ limit: '10KB'}))
 app.use(express.urlencoded({extended: true}))
