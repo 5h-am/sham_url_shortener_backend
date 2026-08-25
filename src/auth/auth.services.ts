@@ -4,6 +4,8 @@ import { accessTokenGeneration, refreshTokenGeneration } from "../utils/token.js
 import { AppError } from "../utils/appError.js"
 import jwt from 'jsonwebtoken'
 import { env } from "../config/env.js"
+import { emailTransport, mailOptions } from "../config/email.js"
+import { forgetPwdEmailBuilder } from "../utils/email/forgetPasswordHtml.js"
 
 export const signUpService = async(email: string, pwd: string, fullName: string) => {
     const hashPwd = await argon2.hash(pwd)
@@ -48,6 +50,12 @@ export const forgetPwdService = async(email:string) => {
         env.RESET_PASSWORD_TOKEN_SECRET,
         {expiresIn: '15m'}
     )
+    const resetPwdUrl = `${env.FRONTEND_URL}/resetPwd/${token}`
+    const resetPwdEmail = forgetPwdEmailBuilder(resetPwdUrl)
+    const options = mailOptions({ to: email, subject: 'Reset Account Password', html: resetPwdEmail})
+    const transporter = emailTransport()
+
+    await transporter.sendMail(options)
 
     return
 }
@@ -55,7 +63,7 @@ export const forgetPwdService = async(email:string) => {
 export const resetPwdService = async(token: string, newPwd: string) => {
     const payload = jwt.verify(token, env.ACCESS_TOKEN_SECRET)
     if(typeof payload !== 'string'){
-        const userId = payload.userId
+        const { userId } = payload
         const hashPwd = await argon2.hash(newPwd)
         await resetPwd(hashPwd, userId)
     }

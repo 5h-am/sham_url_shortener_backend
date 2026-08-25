@@ -41,6 +41,7 @@
   "dependencies": {
     "@types/argon2": "^0.14.1",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.23.1",
     "@types/redis": "^4.0.10",
     "@types/swagger-jsdoc": "^6.0.4",
@@ -55,6 +56,7 @@
     "jiti": "^2.7.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
+    "nodemailer": "^9.0.5",
     "pg": "^8.23.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",

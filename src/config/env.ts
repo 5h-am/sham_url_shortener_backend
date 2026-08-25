@@ -20,7 +20,13 @@ const envSchema = z.object({
     POSTGRES_PORT: z.coerce.number().min(1000),
     REDIS_PORT: z.coerce.number().min(1000),
     DATABASE_URL: z.url().startsWith('postgres'),
-    REDIS_URL: z.url().startsWith('redis')
+    REDIS_URL: z.url().startsWith('redis'),
+
+    SMTP_USER: z.email(),
+    SMTP_PWD: z.string().min(8),
+    SMTP_HOST: z.string(),
+    SMTP_PORT: z.coerce.number(),
+    SMTP_SERVICE: z.string()
 })
 
 const result = envSchema.safeParse(process.env)
