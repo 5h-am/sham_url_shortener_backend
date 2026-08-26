@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 import { env } from "../config/env.js"
 import { emailTransport, mailOptions } from "../config/email.js"
 import { forgetPwdEmailBuilder } from "../utils/email/forgetPasswordHtml.js"
+import { logger } from '../config/logger.js'
 
 export const signUpService = async(email: string, pwd: string, fullName: string) => {
     const hashPwd = await argon2.hash(pwd)
@@ -18,7 +19,7 @@ export const signUpService = async(email: string, pwd: string, fullName: string)
 
 export const logInService = async(email: string, pwd: string) => {
     const user = await loginDetailsFetcher(email)
-    if(user === undefined || !user ) {
+    if(!user) {
         throw new AppError("Invalid Credentials", 401)
     }
     const isValid = await argon2.verify(user.password_hash, pwd)
@@ -56,6 +57,8 @@ export const forgetPwdService = async(email:string) => {
     const transporter = emailTransport()
 
     await transporter.sendMail(options)
+
+    logger.info("Email sent successfully")
 
     return
 }

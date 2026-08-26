@@ -65,7 +65,7 @@ export const logInHandler = async(req: Request, res: Response, next: NextFunctio
 export const refreshHandler = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const { refreshToken } = req.signedCookies
-        if(!refreshToken || refreshToken === undefined) {
+        if(!refreshToken) {
             throw new AppError('Invalid Credentials', 401)
         }
         const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
@@ -87,48 +87,57 @@ export const refreshHandler = async(req: Request, res: Response, next: NextFunct
                 path: '/api/v1/auth/'
             })
 
-            res.status(200).json({
-                message: "Refresh Successfull",
+            return res.status(200).json({
+                message: "Token Refreshed Successfully",
                 accessToken
             })
-        } 
+        }
+        return null
         
     } catch(err) {
         logger.error({ err, requestId: res.getHeader('x-request-id')}, "Error occured while handling refresh endpoint")
         if(err instanceof jwt.TokenExpiredError) {
-            next(new AppError("Invalid Credentials", 401))
+            return next(new AppError("Invalid Credentials", 401))
         }
 
         if(err instanceof jwt.JsonWebTokenError) {
-            next(new AppError("Invalid Credentials", 401))
+            return next(new AppError("Invalid Credentials", 401))
         }
-        next(err)
+        return next(err)
     }
 }
 
 export const logOutHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { refreshToken } = req.signedCookies
-        if(!refreshToken || refreshToken === undefined) {
+        if(!refreshToken) {
             throw new AppError('Already Logged Out', 400)
         }
         const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
         if(typeof payload !== 'string') {
             const redisInfo = await redis.hgetall(`refresh:${payload.refreshId}`)
             if(!(Object.keys(redisInfo).length > 0)) {
-                throw new AppError('Alredy Logged Out', 400)
+                throw new AppError('Already Logged Out', 400)
             }
             await redis.del(`refresh:${payload.refreshId}`)
             res.clearCookie('refreshToken')
 
-            res.status(200).json({
-                message: "Logout Successfull"
+            return res.status(200).json({
+                message: "Logged Out Successfully"
             })
         }
+        return null
 
     }catch(err) {
         logger.error({ err, requestId: res.getHeader('x-request-id')}, 'Error Occured in log out handler')
-        next(err)
+        if(err instanceof jwt.TokenExpiredError) {
+            return next(new AppError("Invalid Credentials", 401))
+        }
+
+        if(err instanceof jwt.JsonWebTokenError) {
+            return next(new AppError("Invalid Credentials", 401))
+        }
+        return next(err)
     }
 }
 
@@ -152,7 +161,7 @@ export const resetPwdHandler = async(req: Request, res: Response, next: NextFunc
         await resetPwdService(token, newPassword)
 
         const { refreshToken } = req.signedCookies
-        if(!refreshToken || refreshToken === undefined) {
+        if(!refreshToken) {
             return res.status(200).json({
                 message: "Password Reset Successfully"
             })
