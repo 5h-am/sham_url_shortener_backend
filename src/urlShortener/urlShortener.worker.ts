@@ -3,7 +3,7 @@ import { connection } from '../config/queue.js'
 import { insertUrlDetails } from './urlShortener.repositories.js'
 import { logger } from '../config/logger.js'
 
-const worker = new Worker('email', async(job) => {
+const worker = new Worker('urlShortener', async(job) => {
     try{
         switch(job.name) {
             case 'insert-url-database-protected':

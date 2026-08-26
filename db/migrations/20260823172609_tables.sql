@@ -23,12 +23,14 @@ CREATE TABLE IF NOT EXISTS urls(
 CREATE TABLE IF NOT EXISTS clicks(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clicked_at TIMESTAMPTZ NOT NULL,
+    ip_address TEXT,
     country TEXT,
     urls_id UUID NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
     referrer TEXT,
     browser TEXT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    device_type TEXT,
+    device TEXT,
+    os TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

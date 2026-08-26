@@ -1,5 +1,5 @@
 import { env } from './env.js'
-import { Queue, Worker } from 'bullmq'
+import { Queue } from 'bullmq'
 import { Redis } from 'ioredis'
 
 export const connection = new Redis(env.REDIS_URL, {
