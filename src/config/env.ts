@@ -2,7 +2,9 @@ import { z } from 'zod'
 import { logger } from './logger.js'
 import dotenv from 'dotenv'
 
-dotenv.config()
+dotenv.config({
+    path: process.env.NODE_ENV === 'testing'? '.env.test' : '.env'
+})
 
 const envSchema = z.object({
     PORT: z.coerce.number().min(1000),

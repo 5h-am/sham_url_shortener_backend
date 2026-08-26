@@ -1,10 +1,13 @@
 -- migrate:up
 
+CREATE TYPE users_role AS ENUM('user', 'admin')
+
 CREATE TABLE IF NOT EXISTS users(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT NOT NULL UNIQUE,
     full_name TEXT NOT NULL,
     password_hash TEXT NOT NULL,
+    role users_role NOT NULL DEFAULT 'user',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -12,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS urls(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     urls_code VARCHAR(10) NOT NULL UNIQUE,
-    users_id UUID NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    users_id UUID REFERENCES users(id) ON DELETE RESTRICT,
     original_url TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

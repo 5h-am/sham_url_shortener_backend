@@ -9,10 +9,11 @@ import { AppError } from '../utils/appError.js'
 export const signUpHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { email, password, fullName } = req.body
-        const { accessToken, refreshId, refreshToken, userId } = await signUpService(email, password, fullName)
+        const { accessToken, refreshId, refreshToken, userId, role } = await signUpService(email, password, fullName)
 
         await redis.hset(`refresh:${refreshId}`, {
             userId,
+            role,
             createdAt: Date.now()
         })
         await redis.expire(`refresh:${refreshId}`, 60 * 60 * 24 * 7)
@@ -38,9 +39,10 @@ export const signUpHandler = async(req: Request, res: Response, next: NextFuncti
 export const logInHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { email, password } = req.body
-        const { accessToken, refreshId, refreshToken, userId } = await logInService(email, password)
+        const { accessToken, refreshId, refreshToken, userId, role } = await logInService(email, password)
         await redis.hset(`refresh:${refreshId}`, {
             userId,
+            role,
             createdAt: Date.now()
         })
         await redis.expire(`refresh:${refreshId}`, 60 * 60 * 24 * 7)

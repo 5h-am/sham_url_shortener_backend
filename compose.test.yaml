@@ -1,0 +1,30 @@
+services:
+  postgres-test:
+    image: postgres:17
+    container_name: backend-postgres-test
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: backend_test
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d backend_test"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+  redis-test:
+    image: redis:7-alpine
+    container_name: backend-redis-test
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis_test_data:/data
+    command: redis-server --appendonly no
+
+volumes:
+  postgres_test_data:
+  redis_test_data:

@@ -23,6 +23,7 @@ export const authValidation = async(req: Request, res: Response, next: NextFunct
                     throw new AppError('Invalid Credentials', 401)
                 }
                 req.userId = redisInfo.userId
+                req.role =  redisInfo.role
                 return next()
             }
             return null

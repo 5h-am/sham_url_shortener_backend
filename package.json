@@ -10,6 +10,11 @@
     "test": "cross-env NODE_ENV=testing vitest",
     "test:run": "cross-env NODE_ENV=testing vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:infra:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "test:migrate": "dbmate up",
+    "test:integration": "npm run test:infra:up && npm run test:migrate && vitest run",
+    "test:infra:down": "docker compose -f docker-compose.test.yml down -v",
+    "test:infra:reset": "npm run test:infra:down && npm run test:infra:up && npm run test:migrate",
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
@@ -21,6 +26,7 @@
     "db:wait": "docker compose run --rm dbmate wait",
     "db:dump": "docker compose run --rm dbmate dump",
     "db:migrate": "docker compose run --rm dbmate migrate",
+    "db:drop": "docker compose run --rm dbmate drop",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -39,6 +45,8 @@
     "vitest": "^4.1.11"
   },
   "dependencies": {
+    "@bull-board/api": "^9.5.0",
+    "@bull-board/express": "^9.5.0",
     "@types/argon2": "^0.14.1",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^8.0.1",
@@ -48,6 +56,7 @@
     "@types/swagger-ui-express": "^4.1.8",
     "argon2": "^0.45.1",
     "body-parser": "^2.3.0",
+    "bullmq": "^6.3.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

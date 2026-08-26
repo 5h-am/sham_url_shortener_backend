@@ -8,12 +8,12 @@ CREATE INDEX idx_clicks_clicked_at ON clicks(clicked_at);
 CREATE INDEX idx_clicks_is_active ON clicks(is_active);
 
 CREATE OR REPLACE FUNCTION update_updated_at_column()
-RETURN TRIGGER AS $$
+RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
-$$ language 'plpgsql'
+$$ language 'plpgsql';
 
 
 CREATE TRIGGER update_users_updated_at_column

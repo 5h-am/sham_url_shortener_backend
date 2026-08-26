@@ -14,7 +14,7 @@ export const signUpService = async(email: string, pwd: string, fullName: string)
     const accessToken  = accessTokenGeneration(user.id)
     const { refreshId, refreshToken } = refreshTokenGeneration()
 
-    return { accessToken, refreshId, refreshToken, userId: user.id }  
+    return { accessToken, refreshId, refreshToken, userId: user.id, role: user.role }  
 }
 
 export const logInService = async(email: string, pwd: string) => {
@@ -30,7 +30,7 @@ export const logInService = async(email: string, pwd: string) => {
     const accessToken  = accessTokenGeneration(user.id)
     const { refreshId, refreshToken } = refreshTokenGeneration()
 
-    return { accessToken, refreshId, refreshToken, userId: user.id }
+    return { accessToken, refreshId, refreshToken, userId: user.id, role: user.role }
 
     
 }
