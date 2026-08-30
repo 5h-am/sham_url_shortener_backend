@@ -8,4 +8,11 @@ export const insertUrlDetails = async(originalUrl: string, urlCode: string, user
   )
 }
 
+export const fetchUrls = async(userId: string) => {
+  await query("SELECT * FROM urls WHERE users_id = $1", [userId])
+}
+
+export const deleteUrl = async(userId: string) => {
+  await query("DELETE FROM urls WHERE users_id = $1", [userId])
+}
 

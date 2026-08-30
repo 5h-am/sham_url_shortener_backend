@@ -3,6 +3,7 @@ import { closePool } from './config/db.js'
 import { closeRedis } from './config/redis.js'
 import { logger } from './config/logger.js'
 import { env } from './config/env.js'
+import { queueQuit } from './config/queue.js'
 
 
 const port = env.PORT
@@ -23,11 +24,15 @@ const handleExit = (signal : string) => {
             console.log("HTTP Server Closed")
             logger.info("HTTP Server Closed")
 
-            closeRedis()
+            await queueQuit()
+            console.log("Queue Closed")
+            logger.info("Queue Closed")
+
+            await closeRedis()
             console.log("Redis Connection Closed")
             logger.info("Redis Connection Closed")
 
-            closePool()         
+            await closePool()         
             console.log("Database connection closed")
             logger.info("Databse Connection Closed")
             process.exit(0)

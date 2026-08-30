@@ -18,6 +18,15 @@ export const authValidation = async(req: Request, res: Response, next: NextFunct
             const refreshToken = Authorization.slice(7)
             const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
             if(typeof payload !== 'string') {
+                const requestCount = await redis.incr(`rateLimiter:${payload.refreshId}`)
+                if(requestCount === 1) {
+                    await redis.expire(`rateLimiter:${payload.refreshId}`, 60)
+                    return next()
+                }else if(requestCount >=100) {
+                    return res.status(429).json({
+                        message: "Rate limit exceeded, Try again after some time",
+                    })
+                }
                 const redisInfo = await redis.hgetall(`refresh:${payload.requestId}`)
                 if(!(Object.keys(redisInfo).length > 0)) {
                     throw new AppError('Invalid Credentials', 401)

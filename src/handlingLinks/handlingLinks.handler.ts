@@ -1,4 +1,4 @@
-import { fetchOriginalUrl } from "./handlingLinks.repositories.js"
+import { urlsCache } from './handlingLinks.cache.js'
 import { Request, Response, NextFunction } from 'express'
 import { logger } from '../config/logger.js'
 import { AppError } from "../utils/appError.js"
@@ -7,6 +7,9 @@ import { urlAnalysisQueue } from "../config/queue.js"
 export const redirectHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { urlCode } = req.params
+        if(!urlCode) {
+            throw new AppError("Bad Request", 400)
+        }
         const userAgent = req.headers['user-agent']
         const referrer = req.headers.referer
         const ipAddress = req.ip
@@ -14,7 +17,7 @@ export const redirectHandler = async(req: Request, res: Response, next: NextFunc
         if(typeof urlCode !== 'string') {
             throw new AppError('Invalid short url', 400)
         }
-        const originalUrlDetails = await fetchOriginalUrl(urlCode)
+        const originalUrlDetails = await urlsCache(urlCode)
         const urlsId = originalUrlDetails.id
 
         await urlAnalysisQueue.add('url-click-analysis', { userAgent, referrer, ipAddress, clickedAt, urlsId }, {

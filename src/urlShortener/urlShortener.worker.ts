@@ -1,6 +1,6 @@
 import { Worker } from 'bullmq'
 import { connection } from '../config/queue.js'
-import { insertUrlDetails } from './urlShortener.repositories.js'
+import { insertUrlDetails, deleteUrl } from './urlShortener.repositories.js'
 import { logger } from '../config/logger.js'
 
 const worker = new Worker('urlShortener', async(job) => {
@@ -21,6 +21,20 @@ const worker = new Worker('urlShortener', async(job) => {
     }
 },{
     connection,
-    concurrency: 10
+    concurrency: 9
+})
+
+const expireWorker = new Worker('expiredUrls', async(job) => {
+    try{
+        await deleteUrl(job.data.userId)
+    }catch(err) {
+        logger.error({queue: 'urlShortener', jobName: job?.name, attemptsMade: job?.attemptsMade, data: job?.data}, `Job ${job?.id} failed: ${err instanceof Error ? err.message: 'Unknown'}`)
+        if(job?.attemptsMade === job?.opts.attempts) {
+            console.log(`Url Shortener Database Insertion Job Permanently Failed: ${job.id}`)
+        }
+    }
+},{
+    connection,
+    concurrency: 2,
 })
 

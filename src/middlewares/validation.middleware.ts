@@ -9,8 +9,8 @@ export function validateData(schema: z.ZodObject){
             schema.parse(req.body)
             next()
         }catch(err) {
-            if(err instanceof ZodError) {
             logger.error({ err, requestId: res.getHeader("x-request-id")})
+            if(err instanceof ZodError) {
                 next(new AppError("Bad Request", 400))
             }else {
                 next(new AppError("Internal Server Error", 500))
