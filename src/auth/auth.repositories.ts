@@ -20,7 +20,6 @@ export const accountCreation = async(email: string, pwd: string, fullName: strin
 
 export const loginDetailsFetcher = async(email: string) => {
     const result = await query('SELECT id, password_hash, user_role FROM users WHERE email = $1', [email])
-    console.log(result.rows[0])
     return result.rows[0]
 }
 

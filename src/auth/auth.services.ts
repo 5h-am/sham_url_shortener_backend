@@ -64,7 +64,7 @@ export const forgetPwdService = async(email:string) => {
 }
 
 export const resetPwdService = async(token: string, newPwd: string) => {
-    const payload = jwt.verify(token, env.ACCESS_TOKEN_SECRET)
+    const payload = jwt.verify(token, env.RESET_PASSWORD_TOKEN_SECRET)
     if(typeof payload !== 'string'){
         const { userId } = payload
         const hashPwd = await argon2.hash(newPwd)

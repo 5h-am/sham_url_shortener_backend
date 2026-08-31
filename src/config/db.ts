@@ -21,7 +21,7 @@ const query = async(text: string, params?: unknown[]) => {
     const start = Date.now()
     try{
         const res = await pool.query(text, params)
-        const duration = start - Date.now()
+        const duration = Date.now() - start
 
         logger.info(`Query executed in ${duration}ms. Command: ${text.split(' ')[0]}`)
         return res

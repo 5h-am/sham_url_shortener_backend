@@ -21,7 +21,7 @@ export const fetchTopDevices = async(urlsId: string) => {
 }
 
 export const fetchTopOs = async(urlsId: string) => {
-    const results = await query('SELECT device, COUNT(*) AS count FROM clicks WHERE urls_id = $1 AND device IS NOT NULL GROUP BY device ORDER BY count DESC LIMIT 10', [urlsId])
+    const results = await query('SELECT os, COUNT(*) AS count FROM clicks WHERE urls_id = $1 AND os IS NOT NULL GROUP BY os ORDER BY count DESC LIMIT 10', [urlsId])
     return results.rows
 }
 

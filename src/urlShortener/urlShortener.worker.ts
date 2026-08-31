@@ -26,7 +26,7 @@ const worker = new Worker('urlShortener', async(job) => {
 
 const expireWorker = new Worker('expiredUrls', async(job) => {
     try{
-        await deleteUrl(job.data.userId)
+        await deleteUrl(job.data.urlCode, job.data.userId)
     }catch(err) {
         logger.error({queue: 'urlShortener', jobName: job?.name, attemptsMade: job?.attemptsMade, data: job?.data}, `Job ${job?.id} failed: ${err instanceof Error ? err.message: 'Unknown'}`)
         if(job?.attemptsMade === job?.opts.attempts) {

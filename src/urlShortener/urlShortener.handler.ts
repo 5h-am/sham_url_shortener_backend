@@ -41,7 +41,7 @@ export const protectedUrlShortenerHandler = async(req: Request, res: Response, n
                 if(expireTime <= 0) {
                     throw new AppError("Expiration Time must be in the future", 400)
                 }
-                await expiredUrlsQueue.add('delete-url-on-expire-date', { userId }, {
+                await expiredUrlsQueue.add('delete-url-on-expire-date', { userId, urlCode }, {
                 priority: 2,
                 attempts: 4,
                 delay: expireTime,
@@ -87,8 +87,12 @@ export const unprotectedUrlShortenerHandler = async(req: Request, res: Response,
 
 export const urlDeleteHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
+        const { query } = req
         const { userId } = req
-        await deleteUrl(userId as string)
+        if(!query?.urlCode || typeof query.urlCode !== 'string') {
+            throw new AppError("Invalid urlCode parameter", 400)
+        }
+        await deleteUrl(query.urlCode, userId as string)
         res.status(200).json({
             message: "Url Deleted Successfully"
         })

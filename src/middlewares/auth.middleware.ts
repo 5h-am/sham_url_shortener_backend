@@ -7,32 +7,33 @@ import { redis } from '../config/redis.js'
 
 export const authValidation = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const { Authorization } = req.headers
-        if(!Authorization) {
+        const { authorization } = req.headers
+        if(!authorization) {
             throw new AppError("Invalid Credentials", 401)
         }
-        if(typeof Authorization === 'string') {
-            if(!(Authorization.startsWith('Bearer '))){
+        if(typeof authorization === 'string') {
+            if(!(authorization.startsWith('Bearer '))){
                 throw new AppError("Invalid Credentials", 401)
             }
-            const refreshToken = Authorization.slice(7)
+            const refreshToken = authorization.slice(7)
             const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
             if(typeof payload !== 'string') {
                 const requestCount = await redis.incr(`rateLimiter:${payload.refreshId}`)
-                if(requestCount === 1) {
-                    await redis.expire(`rateLimiter:${payload.refreshId}`, 60)
-                    return next()
-                }else if(requestCount >=100) {
+                if(requestCount >=100) {
                     return res.status(429).json({
                         message: "Rate limit exceeded, Try again after some time",
                     })
                 }
-                const redisInfo = await redis.hgetall(`refresh:${payload.requestId}`)
+                const redisInfo = await redis.hgetall(`refresh:${payload.refreshId}`)
                 if(!(Object.keys(redisInfo).length > 0)) {
                     throw new AppError('Invalid Credentials', 401)
                 }
                 req.userId = redisInfo.userId
                 req.role =  redisInfo.role
+                if(requestCount === 1) {
+                    await redis.expire(`rateLimiter:${payload.refreshId}`, 60)
+                    return next()
+                }
                 return next()
             }
             return null

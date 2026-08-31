@@ -9,7 +9,7 @@ router.post('/protected/urlShortener', validateData(urlShortenerSchema), protect
 
 router.get('/fetchUrls', listAllUrls)
 
-router.get('/urlDelete', urlDeleteHandler)
+router.get('/urlDelete/:urlCode', urlDeleteHandler)
 
 
 export default router

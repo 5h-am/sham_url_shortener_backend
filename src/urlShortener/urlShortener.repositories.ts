@@ -9,10 +9,11 @@ export const insertUrlDetails = async(originalUrl: string, urlCode: string, user
 }
 
 export const fetchUrls = async(userId: string) => {
-  await query("SELECT * FROM urls WHERE users_id = $1", [userId])
+  const results = await query("SELECT * FROM urls WHERE users_id = $1", [userId])
+  return results.rows
 }
 
-export const deleteUrl = async(userId: string) => {
-  await query("DELETE FROM urls WHERE users_id = $1", [userId])
+export const deleteUrl = async(urlCode: string, userId: string) => {
+  await query("DELETE FROM urls WHERE urls_code = $1 AND users_id = $2", [urlCode, userId])
 }
 

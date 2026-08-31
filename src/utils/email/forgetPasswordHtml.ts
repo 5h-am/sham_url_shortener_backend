@@ -20,7 +20,7 @@ export const forgetPwdEmailBuilder = (url: string) => {
           <!-- Header -->
           <tr>
             <td align="center" style="background:#2563eb; padding:30px;">
-              <h1 style="margin:0; color:#ffffff;">Sham Finance Dashboard</h1>
+              <h1 style="margin:0; color:#ffffff;">Sham Url Shortener</h1>
             </td>
           </tr>
 
@@ -78,7 +78,7 @@ export const forgetPwdEmailBuilder = (url: string) => {
           <!-- Footer -->
           <tr>
             <td align="center" style="padding:20px; background:#f9fafb; color:#888888; font-size:13px;">
-              © 2026 Sham Finance Dashboard. All rights reserved.
+              © 2026 Sham Url Shortener. All rights reserved.
             </td>
           </tr>
 

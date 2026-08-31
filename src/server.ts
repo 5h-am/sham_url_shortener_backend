@@ -45,5 +45,5 @@ const handleExit = (signal : string) => {
     })
 }
 
-process.on("SIGKILL", () => handleExit("SIGKILL"))
+process.on("SIGINT", () => handleExit("SIGINT"))
 process.on("SIGTERM", () => handleExit("SIGTERM"))
