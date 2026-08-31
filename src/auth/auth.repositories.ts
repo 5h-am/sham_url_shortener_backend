@@ -5,7 +5,7 @@ import { AppError } from "../utils/appError.js"
 
 export const accountCreation = async(email: string, pwd: string, fullName: string ) => {
     try{
-        const result = await query('INSERT INTO users(email, password_hash, full_name) VALUES($1, $2, $3) RETURNING id, role', [email, pwd, fullName])
+        const result = await query('INSERT INTO users(email, password_hash, full_name) VALUES($1, $2, $3) RETURNING id, user_role', [email, pwd, fullName])
         return result.rows[0]
     }catch(err) {
         logger.error({ err }, 'Error occured while inserting the user details in the datbase')
@@ -19,7 +19,7 @@ export const accountCreation = async(email: string, pwd: string, fullName: strin
 }
 
 export const loginDetailsFetcher = async(email: string) => {
-    const result = await query('SELECT id, password_hash, role FROM users WHERE email = $1', [email])
+    const result = await query('SELECT id, password_hash, user_role FROM users WHERE email = $1', [email])
     console.log(result.rows[0])
     return result.rows[0]
 }

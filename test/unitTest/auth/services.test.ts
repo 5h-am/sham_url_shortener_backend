@@ -54,7 +54,8 @@ describe("Log In Service Test", () => {
     it('should return all the values for a successfull login', async() => {
         mockLoginDetailsFetcher.mockResolvedValue({
             id: '123',
-            password_hash: 'hello'
+            password_hash: 'hello',
+            user_role: 'user'
         })
 
         mockArgon.mockReturnValue(true)
@@ -69,7 +70,8 @@ describe("Log In Service Test", () => {
             accessToken: 'qwerty',
             refreshToken: '456',
             refreshId: '234',
-            userId: '123'
+            role: "user",
+            userId: '123',
         })
     })
 

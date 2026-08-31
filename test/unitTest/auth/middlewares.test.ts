@@ -13,7 +13,8 @@ vi.mock('../../../src/config/logger.js', () => {
 vi.mock('../../../src/config/redis.js', () => {
     return {
         redis: {
-            hgetall: vi.fn()
+            hgetall: vi.fn(),
+            incr: vi.fn()
         }
     }
 })
@@ -62,7 +63,8 @@ describe('Auth middleware test', () => {
         })
 
         hgetAll.mockResolvedValue({
-            userId: 'qwerty'
+            userId: 'qwerty',
+            role: 'user'
         })
 
         const req = { headers: { Authorization: 'Bearer abc123'}} as unknown as Request

@@ -23,7 +23,7 @@ CREATE TRIGGER update_users_updated_at_column
 
 -- migrate:down
 
-DROP TRIGGER IF EXISTS update_users_updated_at_column;
+DROP TRIGGER IF EXISTS update_users_updated_at_column ON users;
 
 DROP INDEX IF EXISTS idx_clicks_is_active;
 DROP INDEX IF EXISTS idx_clicks_clicked_at;

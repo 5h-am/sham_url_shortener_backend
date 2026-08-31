@@ -105,7 +105,7 @@ describe('Sign Up Handler Tests', () => {
         expect(next).not.toHaveBeenCalled()
     })
 
-    it('should call next with error if sign up servide throws an error', async() => {
+    it('should call next with error if sign up service throws an error', async() => {
         const err = new Error('Hello brother')
         signUpServiceMock.mockImplementation(() => {
             throw err
