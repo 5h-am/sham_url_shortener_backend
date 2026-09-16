@@ -1,5 +1,13 @@
 # 🔗 URL Shortener — Backend API & Worker Engine
 
+[![Live API](https://img.shields.io/badge/Render-Live_API-46E3B7?logo=render&logoColor=white)](https://sham-url-shortener-backend.onrender.com)
+[![Frontend Client](https://img.shields.io/badge/Vercel-Live_Client-black?logo=vercel&logoColor=white)](https://sham-url-shortener.vercel.app/)
+
+> 🚀 **Live Backend API**: [https://sham-url-shortener-backend.onrender.com](https://sham-url-shortener-backend.onrender.com)  
+> 📑 **Live API Documentation (Swagger)**: [https://sham-url-shortener-backend.onrender.com/api-docs](https://sham-url-shortener-backend.onrender.com/api-docs)  
+> 📊 **Live Bull-Board Dashboard**: [https://sham-url-shortener-backend.onrender.com/api/v1/admin/queues](https://sham-url-shortener-backend.onrender.com/api/v1/admin/queues)  
+> 🌐 **Connected Frontend Client**: [https://sham-url-shortener.vercel.app/](https://sham-url-shortener.vercel.app/)
+
 A high-performance, production-ready URL Shortener backend built with **Node.js**, **Express 5**, **TypeScript**, **PostgreSQL**, **Redis**, and **BullMQ**. It features high-throughput asynchronous click analytics, Base62 link encoding, multi-tier caching, automated link expiration, robust JWT authentication with silent refresh rotation, and a real-time BullMQ dashboard.
 
 ---
@@ -273,8 +281,10 @@ Database migrations are managed via [dbmate](https://github.com/amacneil/dbmate)
 ## 📡 API Documentation & Route Reference
 
 ### Base URLs:
-- **API Base Path**: `http://localhost:3000/api/v1`
-- **Short URL Redirection**: `http://localhost:3000/:urlCode`
+- **Production Base Path**: `https://sham-url-shortener-backend.onrender.com/api/v1`
+- **Production Short URL Redirection**: `https://sham-url-shortener-backend.onrender.com/:urlCode`
+- **Local Development Base Path**: `http://localhost:3000/api/v1`
+- **Local Short URL Redirection**: `http://localhost:3000/:urlCode`
 
 ---
 
