@@ -4,6 +4,7 @@ import { Redis } from 'ioredis'
 
 export const connection = new Redis(env.REDIS_URL, {
     maxRetriesPerRequest: null,
+    tls: env.REDIS_URL.startsWith('rediss://') ? { rejectUnauthorized: false } : undefined
 })
 
 export const queueQuit = async() => {

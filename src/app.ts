@@ -16,6 +16,8 @@ import './handlingLinks/handlingLinks.worker.js'
 
 const app = express()
 
+app.set('trust proxy', 1)
+
 configLogger(app)
 
 app.use(helmet())

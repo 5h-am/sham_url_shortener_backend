@@ -16,6 +16,7 @@
     "test:infra:down": "docker compose -f compose.test.yaml down -v",
     "test:infra:reset": "npm run test:infra:down && npm run test:infra:up && npm run test:migrate",
     "build": "tsc",
+    "migrate:prod": "npx dbmate up",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "db:new": "docker compose run --rm dbmate new",

@@ -2,11 +2,14 @@ import { Pool } from 'pg'
 import { logger } from './logger.js'
 import { env } from './env.js'
 
+const isProduction = env.NODE_ENV === 'production'
+
 const pool = new Pool({
     connectionString: env.DATABASE_URL,
+    ssl: isProduction ? { rejectUnauthorized: false } : undefined,
     max: 20,
     idleTimeoutMillis: 30 * 1000,
-    connectionTimeoutMillis: 2000
+    connectionTimeoutMillis: 5000
 })
 
 pool.on("connect", () => {

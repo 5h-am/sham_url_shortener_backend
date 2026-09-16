@@ -22,7 +22,8 @@ export const signUpHandler = async(req: Request, res: Response, next: NextFuncti
         res.cookie('refreshToken', refreshToken, {
             signed: true,
             httpOnly: true,
-            secure: env.NODE_ENV === "production" ? true : false,
+            secure: env.NODE_ENV === "production",
+            sameSite: env.NODE_ENV === "production" ? 'none' : 'lax',
             path: '/api/v1/auth/'
         })
 
@@ -58,7 +59,8 @@ export const logInHandler = async(req: Request, res: Response, next: NextFunctio
         res.cookie('refreshToken', refreshToken, {
             signed: true,
             httpOnly: true,
-            secure: env.NODE_ENV === "production" ? true : false,
+            secure: env.NODE_ENV === "production",
+            sameSite: env.NODE_ENV === "production" ? 'none' : 'lax',
             path: '/api/v1/auth/'
         })
 
@@ -93,7 +95,8 @@ export const refreshHandler = async(req: Request, res: Response, next: NextFunct
             res.cookie('refreshToken', refreshToken, {
                 signed: true,
                 httpOnly: true,
-                secure: env.NODE_ENV === "production" ? true : false,
+                secure: env.NODE_ENV === "production",
+                sameSite: env.NODE_ENV === "production" ? 'none' : 'lax',
                 path: '/api/v1/auth/'
             })
 
@@ -130,7 +133,13 @@ export const logOutHandler = async(req: Request, res: Response, next: NextFuncti
                 throw new AppError('Already Logged Out', 400)
             }
             await redis.del(`refresh:${payload.refreshId}`)
-            res.clearCookie('refreshToken')
+            res.clearCookie('refreshToken', {
+                signed: true,
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: env.NODE_ENV === "production" ? 'none' : 'lax',
+                path: '/api/v1/auth/'
+            })
 
             return res.status(200).json({
                 message: "Logged Out Successfully"
@@ -187,7 +196,13 @@ export const resetPwdHandler = async(req: Request, res: Response, next: NextFunc
                 })
             }
             await redis.del(`refresh:${payload.refreshId}`)
-            res.clearCookie('refreshToken')
+            res.clearCookie('refreshToken', {
+                signed: true,
+                httpOnly: true,
+                secure: env.NODE_ENV === "production",
+                sameSite: env.NODE_ENV === "production" ? 'none' : 'lax',
+                path: '/api/v1/auth/'
+            })
             return res.status(200).json({
                 message: "Password Reset Successfully"
             })

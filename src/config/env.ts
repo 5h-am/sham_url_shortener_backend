@@ -15,12 +15,12 @@ const envSchema = z.object({
     RESET_PASSWORD_TOKEN_SECRET: z.string().min(1),
     FRONTEND_URL: z.url().startsWith('http'),
     BACKEND_URL: z.url().startsWith('http'),
-    POSTGRES_USER: z.string(),
-    POSTGRES_PASSWORD: z.string(),
-    POSTGRES_DB: z.string(),
+    POSTGRES_USER: z.string().optional(),
+    POSTGRES_PASSWORD: z.string().optional(),
+    POSTGRES_DB: z.string().optional(),
 
-    POSTGRES_PORT: z.coerce.number().min(1000),
-    REDIS_PORT: z.coerce.number().min(1000),
+    POSTGRES_PORT: z.coerce.number().min(1000).optional(),
+    REDIS_PORT: z.coerce.number().min(1000).optional(),
     DATABASE_URL: z.url().startsWith('postgres'),
     REDIS_URL: z.url().startsWith('redis'),
 
