@@ -33,17 +33,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/cookie-parser": "^1.4.10",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^26.2.0",
-    "artillery": "^2.0.34",
-    "dbmate": "^2.35.1",
+    "artillery": "^0.0.2",
     "eslint": "^10.9.0",
     "globals": "^17.11.0",
     "tsx": "^4.23.12",
-    "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",
     "vitest": "^4.1.11"
   },
@@ -51,7 +44,12 @@
     "@bull-board/api": "^9.5.0",
     "@bull-board/express": "^9.5.0",
     "@types/argon2": "^0.14.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^26.2.0",
     "@types/nodemailer": "^8.0.1",
     "@types/pg": "^8.23.1",
     "@types/redis": "^4.0.10",
@@ -64,6 +62,7 @@
     "bullmq": "^6.3.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dbmate": "^2.35.1",
     "dotenv": "^17.4.2",
     "express-rate-limit": "^8.7.0",
     "helmet": "^8.3.0",
@@ -81,6 +80,7 @@
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
     "ua-parser-js": "^2.0.10",
+    "typescript": "^6.0.3",
     "zod": "^4.4.3"
   }
 }
