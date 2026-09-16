@@ -6,11 +6,16 @@ import axios from 'axios'
 import { insertAnalysisData } from './handlingLinks.repositories.js'
 
 
-const worker = new Worker('urlAnalysis', async(job) => {
+const analysisWorker = new Worker('urlAnalysis', async(job) => {
     try{
         const { userAgent, referrer, ipAddress, clickedAt, urlsId } = job.data
         const { browser, device, os } = userAgentParser(userAgent)
-        const country = await countryFetcher(ipAddress)
+        let country = 'Unknown'
+        try{
+            country = await countryFetcher(ipAddress)
+        }catch(err) {  
+            country = 'Unknown'
+        }
         await insertAnalysisData(clickedAt, ipAddress, country, urlsId, referrer, browser!, device!, os!, )
         
 
@@ -40,3 +45,7 @@ const countryFetcher = async(ipAddress: string) => {
     return countryName
 
 }
+
+analysisWorker.on('ready', () => {
+    console.log('Analysis worker ready')
+})

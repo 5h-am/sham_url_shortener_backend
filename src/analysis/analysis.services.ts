@@ -1,11 +1,11 @@
 import { fetchTopBrowsers, fetchTopCountries, fetchTopReferrers, fetchTopDevices, fetchTopOs, fetchClicksOverTime } from "./analysis.repositories.js"
 
-export const topValuesService = async(userId: string) => {
-    const topBrowsers = await fetchTopBrowsers(userId)
-    const topCountries = await fetchTopCountries(userId)
-    const topReferrers = await fetchTopReferrers(userId)
-    const topDevices = await fetchTopDevices(userId)
-    const topOs = await fetchTopOs(userId)
+export const topValuesService = async(urlsId: string) => {
+    const topBrowsers = await fetchTopBrowsers(urlsId)
+    const topCountries = await fetchTopCountries(urlsId)
+    const topReferrers = await fetchTopReferrers(urlsId)
+    const topDevices = await fetchTopDevices(urlsId)
+    const topOs = await fetchTopOs(urlsId)
 
     return {
         topBrowsers,
@@ -16,7 +16,7 @@ export const topValuesService = async(userId: string) => {
     }
 }
 
-export const clicksOverTimeService = async(userId: string, groupBy: string) => {
-    const clicksData = await fetchClicksOverTime(userId, groupBy)
+export const clicksOverTimeService = async(urlsId: string, groupBy: string) => {
+    const clicksData = await fetchClicksOverTime(urlsId, groupBy)
     return clicksData
 }

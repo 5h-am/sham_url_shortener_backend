@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS clicks(
     country TEXT,
     urls_id UUID NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
     referrer TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
     browser TEXT,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     device TEXT,
     os TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

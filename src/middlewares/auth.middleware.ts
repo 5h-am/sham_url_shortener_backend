@@ -15,8 +15,8 @@ export const authValidation = async(req: Request, res: Response, next: NextFunct
             if(!(authorization.startsWith('Bearer '))){
                 throw new AppError("Invalid Credentials", 401)
             }
-            const refreshToken = authorization.slice(7)
-            const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET)
+            const accessToken = authorization.slice(7)
+            const payload = jwt.verify(accessToken, env.ACCESS_TOKEN_SECRET)
             if(typeof payload !== 'string') {
                 const requestCount = await redis.incr(`rateLimiter:${payload.refreshId}`)
                 if(requestCount >=100) {
@@ -43,7 +43,7 @@ export const authValidation = async(req: Request, res: Response, next: NextFunct
         }
         
     }catch(err) {
-        logger.error({err, requestId: res.getHeader('x-request-id')}, "Error Occured in in auth middleware")
+        logger.error({err, requestId: res.getHeader('x-request-id')}, "Error Occured in the auth middleware")
         if(err instanceof jwt.TokenExpiredError) {
             return next(new AppError("Invalid Credentials", 401))
         }

@@ -5,6 +5,7 @@ import { env } from '../config/env.js'
 import { redis } from '../config/redis.js'
 import jwt from 'jsonwebtoken'
 import { AppError } from '../utils/appError.js'
+import { DatabaseError } from 'pg'
 
 export const signUpHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
@@ -25,13 +26,20 @@ export const signUpHandler = async(req: Request, res: Response, next: NextFuncti
             path: '/api/v1/auth/'
         })
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Account Created Successfully",
             accessToken
         })
     }catch(err) {
+
         logger.error({ err, requestId: res.getHeader('x-request-id')}, "Error Occured while in sign up handler")
-        next(err)
+
+        if(err instanceof DatabaseError) {
+            if(err.code === '23505') {
+                return next(new AppError('Email already exists', 409))
+            }
+        }
+        return next(err)
     }
 } 
 
@@ -76,7 +84,7 @@ export const refreshHandler = async(req: Request, res: Response, next: NextFunct
             if(!(Object.keys(redisInfo).length > 0)) {
                 throw new AppError('Invalid Credentials', 401)
             }
-            const { accessToken, refreshId, refreshToken } = refreshService(redisInfo.userId)
+            const { accessToken, refreshId, refreshToken } = refreshService()
             await redis.hset(`refresh:${refreshId}`, {
                 userId: redisInfo.userId,
                 createdAt: Date.now()
@@ -146,6 +154,7 @@ export const logOutHandler = async(req: Request, res: Response, next: NextFuncti
 export const forgetPwdHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { email } = req.body
+
         await forgetPwdService(email)
         res.status(200).json({
             message: "Password details send to your email"

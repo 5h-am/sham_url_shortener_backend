@@ -7,12 +7,14 @@ import { env } from "../config/env.js"
 import { emailTransport, mailOptions } from "../config/email.js"
 import { forgetPwdEmailBuilder } from "../utils/email/forgetPasswordHtml.js"
 import { logger } from '../config/logger.js'
+import crypto from 'node:crypto'
 
 export const signUpService = async(email: string, pwd: string, fullName: string) => {
     const hashPwd = await argon2.hash(pwd)
     const user = await accountCreation(email, hashPwd, fullName)
-    const accessToken  = accessTokenGeneration(user.id)
-    const { refreshId, refreshToken } = refreshTokenGeneration()
+    const refreshId = crypto.randomUUID()
+    const accessToken  = accessTokenGeneration(refreshId)
+    const { refreshToken } = refreshTokenGeneration(refreshId)
 
     return { accessToken, refreshId, refreshToken, userId: user.id, role: user.user_role }  
 }
@@ -27,17 +29,19 @@ export const logInService = async(email: string, pwd: string) => {
         throw new AppError("Invalid Credentials", 401)
     }
 
-    const accessToken  = accessTokenGeneration(user.id)
-    const { refreshId, refreshToken } = refreshTokenGeneration()
+    const refreshId = crypto.randomUUID()
+    const accessToken  = accessTokenGeneration(refreshId)
+    const { refreshToken } = refreshTokenGeneration(refreshId)
 
     return { accessToken, refreshId, refreshToken, userId: user.id, role: user.user_role }
 
     
 }
 
-export const refreshService = (userId: string) => {
-    const accessToken = accessTokenGeneration(userId)
-    const { refreshId, refreshToken } = refreshTokenGeneration()
+export const refreshService = () => {
+    const refreshId = crypto.randomUUID()
+    const accessToken  = accessTokenGeneration(refreshId)
+    const { refreshToken } = refreshTokenGeneration(refreshId)
     return { accessToken, refreshId, refreshToken }
 }
 

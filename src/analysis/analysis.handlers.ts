@@ -6,8 +6,8 @@ import { z } from 'zod'
 
 export const topValuesHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const { userId } = req
-        const topValues = await topValuesService(userId as string)
+        const { urlsId } = req.params
+        const topValues = await topValuesService(urlsId as string)
 
         res.status(200).json({
             message: "Top Values Fetched Successfully",

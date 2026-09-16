@@ -1,15 +1,15 @@
 import { Router } from 'express'
 import { listAllUrls, protectedUrlShortenerHandler, urlDeleteHandler } from './urlShortener.handler.js'
-import { validateData } from '../middlewares/validation.middleware.js'
-import { urlShortenerSchema } from './urlShortener.schema.js'
+import { validateData, queryValidator } from '../middlewares/validation.middleware.js'
+import { urlShortenerSchema, listAllUrlsSchema } from './urlShortener.schema.js'
 
 const router = Router()
 
 router.post('/protected/urlShortener', validateData(urlShortenerSchema), protectedUrlShortenerHandler)
 
-router.get('/fetchUrls', listAllUrls)
+router.get('/fetchUrls', queryValidator(listAllUrlsSchema), listAllUrls)
 
-router.get('/urlDelete/:urlCode', urlDeleteHandler)
+router.get('/urlDelete/:urlId', urlDeleteHandler)
 
 
 export default router

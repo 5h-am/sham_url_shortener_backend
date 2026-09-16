@@ -13,7 +13,7 @@ const worker = new Worker('urlShortener', async(job) => {
                 await insertUrlDetails(job.data.originalUrl, job.data.urlCode)
                 break
         }
-    }catch(err) {
+    }catch(err) {   
         logger.error({queue: 'urlShortener', jobName: job?.name, attemptsMade: job?.attemptsMade, data: job?.data}, `Job ${job?.id} failed: ${err instanceof Error ? err.message: 'Unknown'}`)
         if(job?.attemptsMade === job?.opts.attempts) {
             console.log(`Url Shortener Database Insertion Job Permanently Failed: ${job.id}`)
@@ -38,3 +38,6 @@ const expireWorker = new Worker('expiredUrls', async(job) => {
     concurrency: 2,
 })
 
+
+console.log('URL shortener worker started')
+worker.on('ready', () => console.log('worker ready'))

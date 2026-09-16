@@ -2,7 +2,6 @@ import { Router } from "express"
 import authRouter from './auth/auth.routes.js'
 import urlShortenerRouter from './urlShortener/urlShortener.routes.js'
 import adminRouter from './admin/queue.dashboard.routes.js'
-import redirectUrlRouter from './handlingLinks/handlingLinks.routes.js'
 import analysisRouter from './analysis/analysis.routes.js'
 import { authValidation } from "./middlewares/auth.middleware.js"
 import { logOutHandler } from "./auth/auth.handlers.js"
@@ -13,9 +12,7 @@ import { authLimiter, urlShortenerLimiter } from "./config/rateLimiter.js"
 
 const router = Router()
 
-router.use(redirectUrlRouter)
-
-router.get('/unprotected/urlShortener', urlShortenerLimiter, validateData(urlShortenerSchema), unprotectedUrlShortenerHandler)
+router.post('/unprotected/urlShortener', urlShortenerLimiter, validateData(urlShortenerSchema), unprotectedUrlShortenerHandler)
 
 router.use('/auth', authLimiter, authRouter)
 

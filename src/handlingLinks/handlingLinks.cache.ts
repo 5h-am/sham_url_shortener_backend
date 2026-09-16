@@ -1,6 +1,7 @@
 import { redis } from '../config/redis.js'
 import { logger } from '../config/logger.js'
 import { fetchOriginalUrl } from './handlingLinks.repositories.js'
+import { AppError } from '../utils/appError.js'
 
 
 export const urlsCache = async(urlCode: string) => {
@@ -15,6 +16,9 @@ export const urlsCache = async(urlCode: string) => {
         }
 
         const dbData = await fetchOriginalUrl(urlCode)
+        if(!dbData) {
+            throw new AppError("No such url found", 404)
+        }
         await redis.hset(`originalUrl:${urlCode}`, {
             ...dbData
         })

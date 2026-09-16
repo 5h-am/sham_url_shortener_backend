@@ -18,7 +18,7 @@ export const redirectHandler = async(req: Request, res: Response, next: NextFunc
             throw new AppError('Invalid short url', 400)
         }
         const originalUrlDetails = await urlsCache(urlCode)
-        const urlsId = originalUrlDetails.id
+        const urlsId = await originalUrlDetails.id
 
         await urlAnalysisQueue.add('url-click-analysis', { userAgent, referrer, ipAddress, clickedAt, urlsId }, {
             priority: 3,

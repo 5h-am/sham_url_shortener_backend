@@ -5,7 +5,8 @@ import { base62encoding } from '../utils/base62encoding.js'
 import { env } from '../config/env.js'
 import { urlShortenerQueue, expiredUrlsQueue } from '../config/queue.js'
 import { AppError } from '../utils/appError.js'
-import { deleteUrl, fetchUrls } from './urlShortener.repositories.js'
+import { deleteUrl } from './urlShortener.repositories.js'
+import { listAllUrlsService } from './urlShortener.services.js'
 
 
 export const protectedUrlShortenerHandler = async(req: Request, res: Response, next: NextFunction) => {
@@ -78,6 +79,7 @@ export const unprotectedUrlShortenerHandler = async(req: Request, res: Response,
             message: "Url Shortened Successfully",
             url: `${env.BACKEND_URL}/${urlCode}`
         })
+        logger.info("Url shortened Successfully")
         
     }catch(err) {
         logger.error({ err, requestId: res.getHeader('x-request-id') }, 'Error Occured in protected url shortener handler')
@@ -87,12 +89,10 @@ export const unprotectedUrlShortenerHandler = async(req: Request, res: Response,
 
 export const urlDeleteHandler = async(req: Request, res: Response, next: NextFunction) => {
     try{
-        const { query } = req
+        const { params } = req
         const { userId } = req
-        if(!query?.urlCode || typeof query.urlCode !== 'string') {
-            throw new AppError("Invalid urlCode parameter", 400)
-        }
-        await deleteUrl(query.urlCode, userId as string)
+        
+        await deleteUrl(params.urlId as string, userId as string)
         res.status(200).json({
             message: "Url Deleted Successfully"
         })
@@ -108,7 +108,20 @@ export const urlDeleteHandler = async(req: Request, res: Response, next: NextFun
 export const listAllUrls = async(req: Request, res: Response, next: NextFunction) => {
     try{
         const { userId } = req
-        const urls = await fetchUrls(userId as string)
+        const { query } = req
+
+        if(!query.urlsByDate) {
+            query.urlsByDate = 'all'
+        }
+
+        if(!query.sortBy) {
+            query.sortBy = 'created_at'
+        }
+
+        const { urlsByDate, sortBy } = query
+        
+
+        const urls = await listAllUrlsService(userId as string, urlsByDate as string, sortBy as string)
         res.status(200).json({
             message: "Urls Fetched Successfully",
             urls,
