@@ -38,7 +38,7 @@
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
     "@types/node": "^26.2.0",
-    "artillery": "^2.0.34",
+    "artillery": "^0.0.2",
     "dbmate": "^2.35.1",
     "eslint": "^10.9.0",
     "globals": "^17.11.0",
